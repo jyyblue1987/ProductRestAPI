@@ -1,0 +1,11 @@
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.env.*.php
+.env.php
+.DS_Store
+Thumbs.db
+laravel.log
+0197a8efc7c607146e121292239aa1dbe19c0a97
+private.xml
