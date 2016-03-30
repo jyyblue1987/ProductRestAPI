@@ -32,33 +32,19 @@ class ProcessController extends BaseController
 			case 'deleteProduct';
 				$this->deleteProduct();				
 				break;	
+			case 'getProductList';
+				$this->getProductList();				
+				break;
 		}		
 	}		
 	
 	private function getProductList()
 	{
-		if( Input::has('shop_id') == false )
-		{ 
-			$this->outputResult(MISSING_PARAMETER);
-			return;
-		}
+		$data = Product::all();
 		
-		$shop_id = Input::has('shop_id', '0');
-		
-		$shop = Shop::find(Input::get('shop_id', '0'));
-		if( empty($shop) )
+		foreach($data as $value)
 		{
-			$this->outputResult(UNKNOWN, "Invalid Shop");
-			return;
-		}
-		$data = $shop->products()->orderBy('title')->get();
-		
-		$upload_path = Request::root() . '/uploads/file/';
-		
-		foreach($data as $key => $value)
-		{
-			$data[$key]['thumbnail'] =  $upload_path . $value['thumbnail'];
-			$value->user;
+			$value->thumbnail;
 		}
 		
 		$this->outputResult(SUCCESS, $data );
