@@ -1,6 +1,7 @@
 <?php 
 
 class Product extends Eloquent { 
+	use SortableTrait;
 	
 	protected $table = 'product';
 	
