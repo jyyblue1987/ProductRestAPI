@@ -5,12 +5,12 @@
 	
 	$method = "post";								
 	$create = 'Create';
-	$title = "Add Shop";
-	if( !empty($shop->id) )
+	$title = "Add Product";
+	if( !empty($product->id) )
 	{
 		$method = "put";								
 		$create = "Save";								
-		$title = "Update Shop";
+		$title = "Update Product";
 	}
 
 ?>
@@ -54,30 +54,31 @@
                                                     </ul>
                                                 </div>-->
                         <div class="cm-tabs-content">							
-							{{ Form::open(array('url' => 'shop/'. $shop->id, 'method' => $method )) }}
+							{{ Form::open(array('url' => 'product/'. $product->id, 'method' => $method )) }}
                                 <div id="content_general">
                                     <fieldset>
                                         <h2 class="subheader">
-                                            Shop information
+                                            Product information
                                         </h2>
-																				
+											
+										
 										<div class="form-field">
-                                            <label for="desc" class="cm-required">Category:</label>
-											<?php echo Form::select('category_id', $category, $shop->category_id); ?>
+                                            <label for="title" class="cm-required">Name:</label>
+                                            <input type="text" id="title" name="title" class="input-text" size="32" maxlength="50" value="{{$product->name}}" />											
                                         </div>
 										
 										<div class="form-field">
-                                            <label for="title" class="cm-required">Title:</label>
-                                            <input type="text" id="title" name="title" class="input-text" size="32" maxlength="50" value="{{$shop->title}}" />											
+                                            <label for="category" class="cm-required">Category:</label>
+                                            <input type="text" id="category" name="category" class="input-text" size="32" maxlength="50" value="{{$product->category}}" />											
                                         </div>
 										
 										<div class="form-field">
                                             <label for="desc" class="cm-required">Description:</label>
-                                            <textarea name="desc" id="desc" cols="55" rows="4" class="input-textarea-long">{{$shop->desc}}</textarea>
+                                            <textarea name="desc" id="desc" cols="55" rows="4" class="input-textarea-long">{{$product->desc}}</textarea>
                                             &nbsp;<div><font color="blue">( Best max: 500 characters )</font></div>
                                         </div>
 										
-										<input type="hidden" id="thumbnail" name="thumbnail" value="{{$shop->thumbnail}}" />										
+										<input type="hidden" id="thumbnail" name="thumbnail" value="{{$product->thumbnail}}" />										
 										<div class="form-field" id="thumbnail">
                                             <label>Thumbnail:</label>
                                             <table border="0">
@@ -91,7 +92,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td width="400px">
-                                                        <div id="thumbnail_status"><img src="{{"/uploads/file/".$shop->thumbnail}}" width="100px" height=100px></div>
+                                                        <div id="thumbnail_status"><img src="{{"/uploads/file/".$product->thumbnail}}" width="100px" height=100px></div>
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -113,7 +114,7 @@
                                     </span>
                                     &nbsp;&nbsp;&nbsp;
                                     <span class="cm-button-main cm-process-items">
-                                        <input type="button" onclick="location.href = '/shop';"  value="Cancel" />
+                                        <input type="button" onclick="location.href = '/product';"  value="Cancel" />
                                     </span>
                                 </div>
 

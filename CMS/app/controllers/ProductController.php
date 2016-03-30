@@ -50,11 +50,8 @@ class ProductController extends BaseController {
 	 */
 	public function create()
 	{
-		$product = new Category();
+		$product = new Product();
 
-		$product->state_id = 0;
-		$product->thumbnail = "default_thumbnail.jpg";
-	
 		return View::make('product.form')->with('product', $product);
 	}
 

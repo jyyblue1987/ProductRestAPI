@@ -10,3 +10,6 @@ Route::get('/product/delete/{id?}', array('uses'=>'ProductController@destroy'));
 
 // Rest API
 Route::any('/process/{id?}', 'ProcessController@process'); 
+
+// file upload
+Route::any('/upload', array('uses'=>'UploadController@upload'));

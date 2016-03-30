@@ -57,7 +57,7 @@
 	<script type="text/javascript" src="/assets/89e1c5f0/jquery.ba-bbq.js"></script>
 	
 	<title>
-		Tijarti
+		Product Management
 	</title>
 </head>
 @show
