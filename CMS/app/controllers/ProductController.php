@@ -13,7 +13,8 @@ class ProductController extends BaseController {
 		$ids = Input::get('ids');
 		if( !empty($ids) )
 		{
-			DB::table('product')->whereIn('id', $ids)->delete();			
+			DB::table('product')->whereIn('id', $ids)->delete();		
+			DB::table('thumbnail')->whereIn('product_id', $ids)->delete();				
 			return Redirect::back()->withInput();				
 		}
 
@@ -51,8 +52,9 @@ class ProductController extends BaseController {
 	public function create()
 	{
 		$product = new Product();
+		$thumbnail = "";
 
-		return View::make('product.form')->with('product', $product);
+		return View::make('product.form')->with('product', $product)->with('thumbnail', $thumbnail);
 	}
 
 
@@ -63,7 +65,7 @@ class ProductController extends BaseController {
 	 */
 	public function store()
 	{
-		$product = Category::create(Input::all());
+		$product = Product::create(Input::all());
 		if( empty($product) )
 		{
 			$message = 'Internal Server error';
@@ -71,6 +73,20 @@ class ProductController extends BaseController {
 					->withErrors('message', $message)
 					->withInput();
 		}	
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+			
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
 		
 		$message = 'SUCCESS';	
 		
@@ -88,7 +104,7 @@ class ProductController extends BaseController {
 	 */
 	public function show($id)
 	{
-		$product = Category::find($id);				
+		$product = Product::find($id);				
 		return View::make('view')->with('product', $product);
 	}
 
@@ -101,9 +117,22 @@ class ProductController extends BaseController {
 	 */
 	public function edit($id)
 	{
-		$product = Category::find($id);	
+		$product = Product::find($id);	
+		$thumbnails = Thumbnail::where('product_id', $id)->get();
 		
-		return View::make('product.form')->with('product', $product);										
+		$thumbnail = "";
+		
+		$i = 0;
+		foreach($thumbnails as $value)
+		{
+			if( $i == 0 )
+				$thumbnail = $value->thumbnail;
+			else
+				$thumbnail = $thumbnail . "|" . $value->thumbnail;			
+			$i++;
+		}
+		
+		return View::make('product.form')->with('product', $product)->with('thumbnail', $thumbnail);										
 	}
 
 
@@ -115,13 +144,30 @@ class ProductController extends BaseController {
 	 */
 	public function update($id)
 	{
-		$product = Category::find($id);
+		$product = Product::find($id);
 			
 		if (!$product->update(Input::all())) {
 			return Redirect::back()
 					->withErrors('message', $message)
 					->withInput();
 		}	
+		
+		Thumbnail::where('product_id', $id)->delete();
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+			
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
+		
 		
 		$message = 'SUCCESS';
 		
@@ -140,7 +186,7 @@ class ProductController extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$product = Category::find($id);
+		$product = Product::find($id);
 		$product->delete();
 
 		return Redirect::back();

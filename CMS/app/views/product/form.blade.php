@@ -63,8 +63,8 @@
 											
 										
 										<div class="form-field">
-                                            <label for="title" class="cm-required">Name:</label>
-                                            <input type="text" id="title" name="title" class="input-text" size="32" maxlength="50" value="{{$product->name}}" />											
+                                            <label for="name" class="cm-required">Name:</label>
+                                            <input type="text" id="name" name="name" class="input-text" size="32" maxlength="50" value="{{$product->name}}" />											
                                         </div>
 										
 										<div class="form-field">
@@ -78,27 +78,23 @@
                                             &nbsp;<div><font color="blue">( Best max: 500 characters )</font></div>
                                         </div>
 										
-										<input type="hidden" id="thumbnail" name="thumbnail" value="{{$product->thumbnail}}" />										
-										<div class="form-field" id="thumbnail">
-                                            <label>Thumbnail:</label>
+										<input type="hidden" id="video" name="thumbnail" value="{{$thumbnail}}" />	
+										
+										<div class="form-field" id="div_youtube" >
+                                            <label for="youtube_url">Thumbnail:</label>
+                                            <input type="text" id="youtube_url" name="youtube_url" class="input-text" size="80" maxlength="200" value="" onkeydown="addVideoItem(event)"/>
+                                        </div>
+										
+										<div class="form-field" id="div_pdf">
                                             <table border="0">
                                                 <tr>
                                                     <td width="400px">
-                                                        <div id="thumbnail_upload">Upload</div>
+                                                        <div id="video_status"></div>
                                                     </td>
-                                                    <td valign="middle">
-                                                        <div><font color="blue">Max size: 10MB (900 * 400 pixels) , *.jpg, *.png</font></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td width="400px">
-                                                        <div id="thumbnail_status"><img src="{{"/uploads/file/".$product->thumbnail}}" width="100px" height=100px></div>
-                                                    </td>
-                                                    <td></td>
                                                 </tr>
                                             </table>
-                                        </div>		
-			
+                                        </div>
+										
                                     </fieldset>
 
                                 </div>
@@ -128,70 +124,73 @@
     </tr>
 </table>
 
-<script type="text/javascript">
-	var thumbnail = {
-        url: "/upload",
-        dragDrop: false,
-        fileName: "myfile",
-        multiple: false,
-        showCancel: false,
-        showAbort: false,
-        showDone: false,
-        showDelete: false,
-        showError: true,
-        showStatusAfterSuccess: false,
-        showStatusAfterError: false,
-        showFileCounter: false,
-        allowedTypes: "jpg,png",
-        maxFileSize: 5120000,
-        returnType: "text",
-        onSuccess: function(files, data, xhr)
-        {
-            $("#thumbnail").val(data);
- //           $("#status").html("<div>" + data + "</div>");
-            $("#thumbnail_status").html("<img width=100px height=100px src=\"/uploads/file/" + data + "\">");			
-        },
-        deleteCallback: function(data, pd)
-        {
-            for (var i = 0; i < data.length; i++)
-            {
-                $.post("file_delete.php", {op: "delete", name: data[i]},
-                function(resp, textStatus, jqXHR)
-                {
-                    //Show Message
-                    $("#thumbnail_status").html("<div>File Deleted</div>");
-                });
-            }
-            pd.statusbar.hide(); //You choice to hide/not.
-
-        }
-    }
-	
-	$("#thumbnail_upload").uploadFile(thumbnail);
-	
-	
-</script>
-
-<link rel='stylesheet' href='/css/jquery.datetimepicker.css'/>
-<script src='/js/jquery.datetimepicker.full.js'></script>
-<script>
-	$('#startdate').datetimepicker({
-		lang:'ch',
-		timepicker:false,
-		format:'Y-m-d',
-		formatDate:'Y/m/d'
-	});
-	$('#enddate').datetimepicker({
-		lang:'ch',
-		timepicker:false,
-		format:'Y-m-d',
-		formatDate:'Y/m/d'
-	});
-
-</script>
-
 <script type='text/javascript' src='/js/nicEdit.js'></script>
 <script>
+	var did = 0;
+	function addVideoItem(event){
+		if (event.keyCode == 13) { 
+			var data = document.getElementById("youtube_url").value;
+			var id = "";
+			if(data != ""){
+				id = 'imageurl_' + did;
+				document.getElementById("video_status").innerHTML += "<div id='"+id+"' onclick=deleteVideoItem('"+id+"')>" + data + "</div>";
+				document.getElementById("youtube_url").value = "";				
+				did = did + 1;		
+
+				var total = "";
+				var i= 0;
+				for(i = 0; i < did; i++){
+					id = 'imageurl_' + i;
+					var content = document.getElementById(id).innerHTML;
+					if( i == 0 )
+						total += content;
+					else
+						total += "|" + content;					
+				}			
+				$("#video").val(total);				
+			}
+		}
+	}	
+	
+	function deleteVideoItem(id){
+		if(confirm("Do you want to remove this video?")){
+			var total = "";
+			var i= 0;
+			var newid = 0;
+			var html = "";
+			for(i = 0; i < did; i++){
+				if( ('imageurl_' + i) == id )
+					continue;
+				
+				var oldimgid = 'imageurl_' + i;
+				var content = document.getElementById(oldimgid).innerHTML;
+				var newimgid = 'imageurl_' + newid;
+				html += "<div id='"+newimgid+"' onclick=deleteVideoItem('"+newimgid+"')>" + content + "</div>";				
+				if( newid == 0 )
+					total += content;
+				else
+					total += "|" + content;
+				newid++;
+			}
+			did = newid;
+			document.getElementById("video_status").innerHTML = html;					
+			$("#video").val(total);
+		}
+	}
+	
+	loadThumbnails("{{$thumbnail}}");
+	function loadThumbnails(thumbnail)
+	{
+		var img_array = thumbnail.split("|");
+		var html = "";
+		for (var i = 0; i < img_array.length; i++)
+		{
+			var imgid = 'imageurl_' + i;
+			html += "<div id='"+imgid+"' onclick=deleteVideoItem('"+imgid+"')>" + img_array[i] + "</div>";							
+		}
+		did = img_array.length;
+		document.getElementById("video_status").innerHTML = html;					
+	}
 	
 	bkLib.onDomLoaded(function() {
 		new nicEditor({fullPanel : true}).panelInstance('desc');
