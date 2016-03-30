@@ -81,11 +81,29 @@ class ProcessController extends BaseController
 		$product->name = Input::get('name', '');
 		$product->desc = Input::get('desc', '');
 		$product->category = Input::get('category', '');
-			
-		if( $product->save() == true )
-			$this->outputResult(SUCCESS, $product );		
-		else
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+		
+		$ret = $product->save();
+		if( $ret == false )
+		{
 			$this->outputResult(SERVER_INTERNAL_ERROR);		
+			return;
+		}
+		
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
+		
+		$this->outputResult(SUCCESS, $product );					
 	}
 	
 	private function updateProduct()
@@ -111,10 +129,31 @@ class ProcessController extends BaseController
 		$product->desc = Input::get('desc', '');
 		$product->category = Input::get('category', '');
 			
-		if( $product->save() == true )
-			$this->outputResult(SUCCESS, $product );		
-		else
+		$ret = $product->save();
+		
+		Thumbnail::where('product_id', $product->id)->delete();
+		
+		if( $ret == false )
+		{
 			$this->outputResult(SERVER_INTERNAL_ERROR);		
+			return;
+		}
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+		
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
+		
+		$this->outputResult(SUCCESS, $product );				
 	}
 	
 	private function deleteProduct()
