@@ -32,7 +32,7 @@ class ProcessController extends BaseController
 			case 'deleteProduct';
 				$this->deleteProduct();				
 				break;	
-			case 'getProductList';
+			case 'getproductdata1';
 				$this->getProductList();				
 				break;
 			case 'addProduct2';
@@ -44,8 +44,11 @@ class ProcessController extends BaseController
 			case 'deleteProduct2';
 				$this->deleteProduct2();				
 				break;	
-			case 'getProductList2';
+			case 'getproductdata2';
 				$this->getProductList2();				
+				break;
+			case 'getproductdata';
+				$this->getproductdata();				
 				break;
 				
 		}		
@@ -335,6 +338,27 @@ class ProcessController extends BaseController
 		$this->outputResult(SUCCESS, $file_name );
 	}
 	
+	private function getproductdata()
+	{
+		$product1 = Product::where('type', '1')->get();
+		$product2 = Product::where('type', '2')->get();
+		
+		foreach($product1 as $value)
+		{
+			$value->thumbnail;
+		}
+		
+		foreach($product2 as $value)
+		{
+			$value->thumbnail;
+		}
+		
+		$data = array();
+		$data['product1'] = $product1;
+		$data['product2'] = $product2;
+		
+		$this->outputResult(SUCCESS, $data );
+	}
 	
 	private function outputResult( $retcode, $content = '', $error_msg = null )
 	{
