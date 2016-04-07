@@ -35,12 +35,25 @@ class ProcessController extends BaseController
 			case 'getProductList';
 				$this->getProductList();				
 				break;
+			case 'addProduct2';
+				$this->addProduct2();				
+				break;	
+			case 'updateProduct2';
+				$this->updateProduct2();				
+				break;		
+			case 'deleteProduct2';
+				$this->deleteProduct2();				
+				break;	
+			case 'getProductList2';
+				$this->getProductList2();				
+				break;
+				
 		}		
 	}		
 	
 	private function getProductList()
 	{
-		$data = Product::all();
+		$data = Product::where('type', '1')->get();
 		
 		foreach($data as $value)
 		{
@@ -67,6 +80,7 @@ class ProcessController extends BaseController
 		$product->name = Input::get('name', '');
 		$product->desc = Input::get('desc', '');
 		$product->category = Input::get('category', '');
+		$product->type = 1;
 		
 		$thumbnails = explode("|", Input::get('thumbnail', ''));
 		
@@ -114,6 +128,7 @@ class ProcessController extends BaseController
 		$product->name = Input::get('name', '');
 		$product->desc = Input::get('desc', '');
 		$product->category = Input::get('category', '');
+		$product->type = 1;
 			
 		$ret = $product->save();
 		
@@ -161,6 +176,117 @@ class ProcessController extends BaseController
 		Thumbnail::where('product_id', Input::get('product_id', '0'))->delete();
 		
 		$this->outputResult(SUCCESS, array() );				
+	}
+	
+	private function getProductList2()
+	{
+		$data = Product::where('type', '2')->get();
+		
+		foreach($data as $value)
+		{
+			$value->thumbnail;
+		}
+		
+		$this->outputResult(SUCCESS, $data );
+	}
+
+	
+	private function addProduct2()
+	{
+		if( Input::has('name') == false ||
+			Input::has('category') == false ||
+			Input::has('desc') == false ||
+			Input::has('thumbnail') == false )
+		{ 
+			$this->outputResult(MISSING_PARAMETER);
+			return;
+		}
+				
+		$product = new Product();
+		
+		$product->name = Input::get('name', '');
+		$product->desc = Input::get('desc', '');
+		$product->category = Input::get('category', '');
+		$product->type = 2;
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+		
+		$ret = $product->save();
+		if( $ret == false )
+		{
+			$this->outputResult(SERVER_INTERNAL_ERROR);		
+			return;
+		}
+		
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
+		
+		$this->outputResult(SUCCESS, $product );					
+	}
+	
+	private function updateProduct2()
+	{
+		if( Input::has('product_id') == false ||
+			Input::has('name') == false ||
+			Input::has('category') == false ||
+			Input::has('desc') == false ||
+			Input::has('thumbnail') == false )
+		{ 
+			$this->outputResult(MISSING_PARAMETER);
+			return;
+		}
+				
+		$product = Product::find(Input::get('product_id', '0'));
+		if( empty($product) )
+		{
+			$this->outputResult(UNKNOWN, "There is no product." );
+			return;
+		}
+		
+		$product->name = Input::get('name', '');
+		$product->desc = Input::get('desc', '');
+		$product->category = Input::get('category', '');
+		$product->type = 2;
+			
+		$ret = $product->save();
+		
+		Thumbnail::where('product_id', $product->id)->delete();
+		
+		if( $ret == false )
+		{
+			$this->outputResult(SERVER_INTERNAL_ERROR);		
+			return;
+		}
+		
+		$thumbnails = explode("|", Input::get('thumbnail', ''));
+		
+		for($i = 0; $i < count($thumbnails); $i++ )
+		{
+			if( empty($thumbnails[$i]) )
+				continue;
+			
+			$thumbnail = new Thumbnail;
+			$thumbnail->thumbnail = $thumbnails[$i];
+			$thumbnail->product_id = $product->id;
+			
+			$thumbnail->save();
+		}
+		
+		$this->outputResult(SUCCESS, $product );				
+	}
+	
+	private function deleteProduct2()
+	{
+		$this->deleteProduct();
 	}
 		
 	private function uploadPicture()

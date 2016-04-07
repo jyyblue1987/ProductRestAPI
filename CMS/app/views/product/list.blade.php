@@ -10,11 +10,11 @@
 		<div class="clear mainbox-title-container">
 		        <div class="tools-container">
 					<span class="action-add">
-						<a href="/product/create">Add Product</a>
+						<a href="/product{{$type}}/create">Add Product{{$type}}</a>
 					</span>
                 </div>
 				<h1 class="mainbox-title float-left">
-					Product	
+					Product{{$type}}	
 				</h1>
 		</div>
 		

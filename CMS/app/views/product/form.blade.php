@@ -5,12 +5,12 @@
 	
 	$method = "post";								
 	$create = 'Create';
-	$title = "Add Product";
+	$title = "Add Product" . $product->type;
 	if( !empty($product->id) )
 	{
 		$method = "put";								
 		$create = "Save";								
-		$title = "Update Product";
+		$title = "Update Product" . $product->type;
 	}
 
 ?>
@@ -54,13 +54,14 @@
                                                     </ul>
                                                 </div>-->
                         <div class="cm-tabs-content">							
-							{{ Form::open(array('url' => 'product/'. $product->id, 'method' => $method )) }}
+							{{ Form::open(array('url' => 'product' . $product->type . '/' . $product->id, 'method' => $method )) }}
                                 <div id="content_general">
                                     <fieldset>
                                         <h2 class="subheader">
                                             Product information
                                         </h2>
 											
+										<input type="hidden" id="type" name="type" value="{{$product->type}}" />	
 										
 										<div class="form-field">
                                             <label for="name" class="cm-required">Name:</label>
@@ -110,7 +111,7 @@
                                     </span>
                                     &nbsp;&nbsp;&nbsp;
                                     <span class="cm-button-main cm-process-items">
-                                        <input type="button" onclick="location.href = '/product';"  value="Cancel" />
+                                        <input type="button" onclick="location.href = '/product{{$product->type}}';"  value="Cancel" />
                                     </span>
                                 </div>
 

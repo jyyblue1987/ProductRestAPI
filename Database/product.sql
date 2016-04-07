@@ -25,8 +25,13 @@ CREATE TABLE `product` (
   `name` varchar(100) DEFAULT '',
   `desc` text,
   `category` varchar(100) DEFAULT '',
+  `type` int(3) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+/*Data for the table `product` */
+
+insert  into `product`(`id`,`name`,`desc`,`category`,`type`) values (4,'444','4444','444',1),(5,'6666','666','6666',2),(6,'6789','desc1','4444',2);
 
 /*Table structure for table `thumbnail` */
 
@@ -37,7 +42,11 @@ CREATE TABLE `thumbnail` (
   `thumbnail` varchar(200) DEFAULT NULL,
   `product_id` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+/*Data for the table `thumbnail` */
+
+insert  into `thumbnail`(`id`,`thumbnail`,`product_id`) values (3,'345435',5),(4,'435435',5),(5,'43543',5),(6,'5435',5),(7,'123',6),(8,'123',6);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

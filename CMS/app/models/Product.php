@@ -5,7 +5,7 @@ class Product extends Eloquent {
 	
 	protected $table = 'product';
 	
-	protected $fillable = array('name', 'category', 'desc' );
+	protected $fillable = array('name', 'category', 'desc', 'type' );
 	
 	public $timestamps = false;
 	

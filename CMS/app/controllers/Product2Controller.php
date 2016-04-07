@@ -1,6 +1,6 @@
 <?php
 
-class ProductController extends BaseController {
+class Product2Controller extends BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -18,7 +18,7 @@ class ProductController extends BaseController {
 			return Redirect::back()->withInput();				
 		}
 
-		$query = Product::where('type', '1')->sortable();
+		$query = Product::where('type', '2')->sortable();
 		
 		$search = Input::get('search');
 		if( !empty($search) )
@@ -38,7 +38,7 @@ class ProductController extends BaseController {
 		$product = $query->paginate($pagesize);	
 		
 		Input::flashOnly('search');
-		$type = 1;
+		$type = 2;
 				
 		return View::make('product.list')->with('product', $product)											
 											->with('pagesize',$pagesize)
@@ -54,11 +54,11 @@ class ProductController extends BaseController {
 	public function create()
 	{
 		$product = new Product();
-		$product->type = 1;
+		$product->type = 2;
 		$thumbnail = "";
 
 		return View::make('product.form')->with('product', $product)->with('thumbnail', $thumbnail)
-			->with('type', '1');
+			->with('type', '2');
 	}
 
 

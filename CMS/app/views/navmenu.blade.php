@@ -20,16 +20,30 @@
                     <div class="col">
                         <ul>
                             <li class="blank users">
-                            	<a href="/product">
-                                    <span>Product</span>
-                                    <span class="hint">Manage products that are registered at your store.</span>
+                            	<a href="/product1">
+                                    <span>Product1</span>
+                                    <span class="hint">Manage products 1 that are registered at your store.</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </li>           
-      
+			<li>
+                <a class="drop">Product2</a>
+                <div class="dropdown-column">
+                    <div class="col">
+                        <ul>
+                            <li class="blank users">
+                            	<a href="/product2">
+                                    <span>Product2</span>
+                                    <span class="hint">Manage products 2 that are registered at your store.</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>           
 			
         </ul>
 			
