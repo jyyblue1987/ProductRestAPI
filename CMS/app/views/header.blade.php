@@ -4,7 +4,7 @@
 	<meta name="language" content="en" />
 
 	<!-- blueprint CSS framework -->
-        <link rel="stylesheet" type="text/css" href="/css/screen.css" media="screen, projection" />
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" media="screen, projection" />
 	<link rel="stylesheet" type="text/css" href="/css/print.css" media="print" />
 	<!--[if lt IE 8]>
 	<link rel="stylesheet" type="text/css" href="/css/ie.css" media="screen, projection" />
@@ -22,10 +22,8 @@
 
 	
 	<script type='text/javascript' src='/js/jquery.min.js'></script>
-
 	<script type='text/javascript' src='/js/jquery.appear-1.1.1.js'></script>
 	<script type='text/javascript' src='/js/tooltip.min.js'></script>
-
 	<script type='text/javascript' src='/js/tinymce.editor.js'></script>
 
 	<script type='text/javascript' src='/js/core.js'></script>
